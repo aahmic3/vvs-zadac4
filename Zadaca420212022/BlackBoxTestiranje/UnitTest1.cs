@@ -1,4 +1,4 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using System.Threading;
@@ -18,12 +18,40 @@ namespace BlackBoxTestiranje
             driver.Navigate().GoToUrl(urlStranice);
         }
         [TestMethod]
+        public void TestProvjereLokacije()
+        {
+            IWebElement lokacija = driver.FindElement(By.Id("lokacija"));
+            lokacija.Clear();
+            lokacija.SendKeys("Vlašić");
+            Thread.Sleep(500);
+
+            IWebElement buttonProvjeri = driver.FindElement(By.Id("btnProvjeri"));
+            buttonProvjeri.Click();
+            Thread.Sleep(500);
+
+            var expectedAlertText = "Podržane su samo lokacije izleta na okolnim sarajevskim planinama!";
+            var alert_win = driver.SwitchTo().Alert();
+            Assert.AreEqual(expectedAlertText, alert_win.Text);
+            alert_win.Accept();
+
+            lokacija.Clear();
+            Thread.Sleep(1000);
+
+
+            buttonProvjeri.Click();
+            Thread.Sleep(1000);
+
+            var alert_win2 = driver.SwitchTo().Alert();
+            Assert.AreEqual(expectedAlertText, alert_win2.Text);
+            alert_win.Accept();
+        }
+        [TestMethod]
         public void TestLokacijaOvisiOVremenu()
         {
             IWebElement lokacija = driver.FindElement(By.Id("lokacija"));
-            lokacija.SendKeys("Bjela�nica");
+            lokacija.SendKeys("Bjelašnica");
             Thread.Sleep(500);
-            //Ovo vjerotno nismo morali dodavati ali �isto radi prezantativnosti doga�aja
+            //Ovo vjerotno nismo morali dodavati ali èisto radi prezantativnosti dogaðaja
             IWebElement vrijeme = driver.FindElement(By.Id("trajanje"));
             vrijeme.SendKeys("");
             Thread.Sleep(500);
@@ -37,6 +65,7 @@ namespace BlackBoxTestiranje
             alert_win.Accept();
             Thread.Sleep(500);
         }
+        
 
     }
 
