@@ -13,15 +13,29 @@ namespace BlackBoxTestiranje
         [ClassInitialize]
         public static void Inicijalizacija(TestContext context)
         {
-            IWebDriver driver = new ChromeDriver();
-            string urlStranice = "https://localhost:44389/Grupa2";
+            driver = new ChromeDriver();
+            string urlStranice = "https://localhost:44389/Grupa2/Create/";
             driver.Navigate().GoToUrl(urlStranice);
         }
-
         [TestMethod]
-        public void TestProvjereLokacije()
+        public void TestLokacijaOvisiOVremenu()
         {
-           
+            IWebElement lokacija = driver.FindElement(By.Id("lokacija"));
+            lokacija.SendKeys("Bjelašnica");
+            Thread.Sleep(500);
+            //Ovo vjerotno nismo morali dodavati ali èisto radi prezantativnosti dogaðaja
+            IWebElement vrijeme = driver.FindElement(By.Id("trajanje"));
+            vrijeme.SendKeys("");
+            Thread.Sleep(500);
+
+            IWebElement buttonProvjeri = driver.FindElement(By.Id("btnProvjeri"));
+            buttonProvjeri.Click();
+            Thread.Sleep(500);
+            var expectedAlertText = "Za provjeru lokacije morate unijeti vrijeme trajanja...";
+            var alert_win = driver.SwitchTo().Alert();
+            Assert.AreEqual(expectedAlertText, alert_win.Text);
+            alert_win.Accept();
+            Thread.Sleep(500);
         }
 
     }
