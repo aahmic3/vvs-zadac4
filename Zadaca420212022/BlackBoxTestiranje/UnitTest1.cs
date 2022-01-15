@@ -65,7 +65,31 @@ namespace BlackBoxTestiranje
             alert_win.Accept();
             Thread.Sleep(500);
         }
-        
+
+        [TestMethod]
+        public void TestProvjeriVrijemeTrajanja()
+        {
+
+            IWebElement lokacija = driver.FindElement(By.Id("lokacija"));
+            lokacija.SendKeys("Igman");
+            Thread.Sleep(500);
+
+            IWebElement vrijeme = driver.FindElement(By.Id("trajanje"));
+            vrijeme.SendKeys("0.001");
+            Thread.Sleep(500);
+
+            IWebElement buttonProvjeri = driver.FindElement(By.Id("btnProvjeri"));
+            buttonProvjeri.Click();
+            Thread.Sleep(500);
+
+            var expectedAlertText = "Na Igmanu se mora provesti više od dvije minute!";
+            var alert_win = driver.SwitchTo().Alert();
+            Assert.AreEqual(expectedAlertText, alert_win.Text);
+            alert_win.Accept();
+            Thread.Sleep(500);
+
+        }
+
 
     }
 
